@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import { Navbar } from './components/Navbar';
 import './App.css';
+import Features from './components/Features';
+import backgroundImage from "./img/Background.png";
+import { RoutesFunc } from './routes';
 
-function App() {
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <RoutesFunc></RoutesFunc>
+   
+
+
+
   );
 }
 
-export default App;
+
+ {/* add to function App() if things don't work
+ <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
+      <Navbar></Navbar>
+      <Features></Features>
+      
+  </div> */}
+
+

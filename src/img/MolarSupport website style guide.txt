@@ -1,0 +1,17 @@
+---Color Palettes---
+white background - #F5F5F7 
+black text - #23314C 
+pink text - #CC76E2
+violet text - #9641E7
+secondary text - #878787
+gradient buttons - #6D58C6- #CC76E2 
+
+---Typography---
+font: Nunito
+link - https://fonts.google.com/specimen/Nunito 
+font sizes and variables: 
+H1 - 54 nunito Extrabold
+H2 - 40 nunito bold
+H3 - 32 nunito bold
+P - 24 nunito Semibold
+sub titles - 16 nunito bold
