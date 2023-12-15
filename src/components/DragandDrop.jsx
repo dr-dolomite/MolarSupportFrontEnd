@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"; // Importing the "useRef" and "useState" hooks from the "react" module
 import { useNavigate } from "react-router-dom";
+import IMAGES from "../img/images";
 
 export default function DragAndDrop() {
   const [dragActive, setDragActive] = useState(false);
@@ -65,44 +66,45 @@ export default function DragAndDrop() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex h-screen flex-col justify-center items-center">
+        <img
+          src={IMAGES.toothLogo}
+          alt="tooth"
+          className="w-[108px] h-[104px] cursor-pointer"
+          onClick={openFileExplorer}
+        />
       <form
         className={`${
           dragActive ? "" : ""
-        } p-4 w-1/3 rounded-lg min-h-[10rem] text-center flex flex-col items-center justify-center font-poppins`}
+        } m-8 gap-y-8 grid grid-cols-1 place-content-center max-w-lg text-center`}
         onDragEnter={handleDragEnter}
         onSubmit={(e) => e.preventDefault()}
         onDrop={handleDrop}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
       >
-        <p
-          style={{
-            fontFamily: "Nunito, sans-serif",
-            fontSize: "24px",
-            fontWeight: "600",
-          }}
-        >
+        <p className="font-nunito text-[24px] font-semibold">
           Drag & Drop to Upload{" "}
           <span
-            className="font-bold text-blue-600 cursor-pointer"
+            className="font-bold text-blue-600 cursor-pointer font-nunito"
             onClick={openFileExplorer}
-            style={{ fontFamily: "Nunito, sans-serif" }}
-          ></span>{" "}
-          the CBCT M3 Axial Slice image
+          >the CBCT M3 Axial Slice image</span>{" "}
+          
         </p>
 
-        <div className="flex flex-col items-center p-3">
+        <div className="flex flex-col justify-center p-3">
           {files.length > 0 ? (
             files.map((file, idx) => (
-              <div key={idx} className="flex flex-row space-x-5">
-                <span>{file.name}</span>
+              <div key={idx}>
+                <div className="max-w-md max-h-md flex flex-col">
+                <span className="mb-2 text-ellipsis overflow-hidden">{file.name}</span>
                 <span
-                  className="text-red-500 cursor-pointer"
+                  className="text-red-500 cursor-pointer font-bold text-[18px] font-nunito"
                   onClick={removeFile}
                 >
                   remove
                 </span>
+                </div>
               </div>
             ))
           ) : (
@@ -110,14 +112,19 @@ export default function DragAndDrop() {
           )}
         </div>
 
+        <div className="flex items-center justify-center">
         <button
-          className="bg-black rounded-lg p-2 mt-3 w-auto"
+          className="bg-[#6e58c6] hover:bg-[#6e58c6]/80 rounded-lg p-3 mt-2 w-[180px]"
           onClick={handleSubmitFile}
         >
-          <span className="p-2 text-white">Submit</span>
+          <span className=" text-white font-nunito font-semibold text-[16px]">Submit</span>
         </button>
+        </div>
 
-        {files.length > 0 && <img src={URL.createObjectURL(files[0])} alt="Uploaded File" />}
+
+        {files.length > 0 && (
+          <img src={URL.createObjectURL(files[0])} className="w-[420px] h-[440px] object-contain" alt="Uploaded File" />
+        )}
       </form>
       <input
         type="file"

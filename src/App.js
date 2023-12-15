@@ -1,7 +1,4 @@
-import { Navbar } from './components/Navbar';
 import './App.css';
-import Features from './components/Features';
-import backgroundImage from "./img/Background.png";
 import { RoutesFunc } from './routes';
 
 
