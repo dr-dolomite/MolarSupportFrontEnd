@@ -14,11 +14,3 @@ export default function App() {
 }
 
 
- {/* add to function App() if things don't work
- <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
-      <Navbar></Navbar>
-      <Features></Features>
-      
-  </div> */}
-
-

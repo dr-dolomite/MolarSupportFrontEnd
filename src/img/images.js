@@ -4,5 +4,6 @@ const IMAGES = {
   sample3: require('./sample 3.png'),
   sample4: require('./sample 4.png'),
   toothLogo: require('./tooth.png'),
+  errorLogo: require('./error.svg'),
 }
 export default IMAGES;

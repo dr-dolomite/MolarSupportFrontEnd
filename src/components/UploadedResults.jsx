@@ -55,7 +55,7 @@ export const UploadedResults = () => {
               </div>
 
               <div className="h-[180px] flex flex-col justify-center items-center text-center">
-                <h2 className="text-[40px] font-semibold text-primary">
+                <h2 className="text-[40px] font-semibold text-[#23314C]">
                   Hi I'm Molar Support
                 </h2>
                 <p className="text-[20px]">Your Assessment Buddy</p>
@@ -66,6 +66,7 @@ export const UploadedResults = () => {
           {/* Left bottom div */}
           <div className="h-[640px] w-[620px] rounded-[35px] shadow-3x1 p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300 bg-white">
             {/* Display the result image */}
+            <div className="outline-dashed outline-offset-[40px] rounded-[24px] outline-[#23314C]">
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -76,6 +77,7 @@ export const UploadedResults = () => {
                 onError={(e) => console.error("Error loading image:", e)}
               />
             )}
+            </div>
           </div>
         </div>
 

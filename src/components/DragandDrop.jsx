@@ -5,10 +5,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import IMAGES from "../img/images";
 
-export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
+export default function DragAndDrop({
+  onFileSelection,
+  onDragAndDropError,
+  onDragAndDropAccept,
+  onAssessmentStart,
+}) {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
-  const [setError] = useState(null); // New state for error
+  const [error, setError] = useState(null); // New state for error
   const inputRef = useRef(null); // Define inputRef
 
   const openFileExplorer = () => {
@@ -52,10 +57,10 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
       // Handle no files selected
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("file", files[0]);
-  
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/check_valid_cbct",
@@ -66,18 +71,20 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
           },
         }
       );
-  
+
       console.log("Response from check_valid_cbct:", response.data);
-  
+
       // Check if the image is valid
       if (response.data && response.data.error) {
         // If it's an invalid image, set the error state
         setError(response.data.error);
 
-                // Call the callback function to inform Features about the error
-                onDragAndDropError();
+        // Call the callback function to inform Features about the error
+        onDragAndDropError();
       } else {
         // If it's a valid image, proceed with processing
+        onDragAndDropAccept();
+
         setError(null); // Reset error state
         const processResponse = await axios.post(
           "http://127.0.0.1:8000/process_image",
@@ -88,14 +95,14 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
             },
           }
         );
-  
+
         console.log("Response from process_image:", processResponse.data);
-  
+
         // Handle the response as needed, e.g., update state to display the result image
         console.log(processResponse.data);
-  
-        // Redirect to the UploadedResults page
-        navigate("/UploadedResults");
+
+        // Redirect to the UploadedResults page using the provided callback
+        onAssessmentStart();
       }
     } catch (error) {
       // Handle errors
@@ -103,10 +110,9 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
       setError("An error occurred while processing the image.");
     }
   };
-  
 
   return (
-    <div className="flex h-screen flex-col justify-center items-center">
+    <div className="flex h-screen flex-col justify-center items-center min-w-[80%]">
       <img
         src={IMAGES.toothLogo}
         alt="tooth"
@@ -115,31 +121,33 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
       />
 
       <form
-        className="m-8 gap-y-8 grid grid-cols-1 place-content-center max-w-lg text-center"
+        className="m-8 gap-y-8 grid grid-cols-1 sm:w-[420px] text-center"
         onDragEnter={handleDragEnter}
         onSubmit={(e) => e.preventDefault()}
         onDrop={handleDrop}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
       >
-        <p className="font-nunito text-[24px] font-semibold">
-          Drag & Drop to Upload{" "}
-          <span
-            className="font-bold text-blue-600 cursor-pointer font-nunito"
+        <div className="flex flex-col justify-center items-center">
+          <p className="font-nunito text-[24px] font-semibold">
+            Drag & Drop to Upload the
+          </p>
+          <p
+            className="font-bold text-blue-600 text-[24px] cursor-pointer font-nunito"
             onClick={openFileExplorer}
           >
-            the CBCT M3 Axial Slice image
-          </span>{" "}
-        </p>
+            CBCT M3 Axial Slice image
+          </p>
+        </div>
 
         <div className="flex flex-col justify-center p-3">
           {files.length > 0 ? (
             files.map((file, idx) => (
               <div key={idx}>
                 <div className="max-w-md max-h-md flex flex-col">
-                  <span className="mb-2 text-ellipsis overflow-hidden">
+                  <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">
                     {file.name}
-                  </span>
+                  </p>
                   <span
                     className="text-red-500 cursor-pointer font-bold text-[18px] font-nunito"
                     onClick={() => removeFile(idx)}
@@ -150,13 +158,13 @@ export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
               </div>
             ))
           ) : (
-            <p>No files selected</p>
+            <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">No files selected</p>
           )}
         </div>
 
         <div className="flex items-center justify-center">
           <button
-            className="bg-[#6e58c6] hover:bg-[#6e58c6]/80 rounded-lg p-3 mt-2 w-[180px]"
+            className="bg-[#6e58c6] hover:bg-[#6e58c6]/80 rounded-lg p-3 w-[180px]"
             onClick={handleSubmitFile}
           >
             <span className=" text-white font-nunito font-semibold text-[16px]">
