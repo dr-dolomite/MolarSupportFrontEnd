@@ -1,13 +1,44 @@
-import React from "react";
+import React, { useEffect, useState, setError } from "react";
 import logo from "../img/Circle logo.png";
-//import { useLocation } from 'react-router-dom'; // Add this line
 import { LuRefreshCw } from "react-icons/lu";
 import { RiRectangleFill } from "react-icons/ri";
-import { useLocation, Link } from "react-router-dom"; // Add Link from react-router-dom
+import { useLocation, Link } from "react-router-dom";
 
 export const UploadedResults = () => {
-  const location = useLocation(); // Add this line
-  const imageUrl = location.state?.imageUrl; // Access the passed image source
+  const [imageSrc, setImageSrc] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("Location:", location.pathname);
+
+    const loadImageSrc = async () => {
+      try {
+        console.log("Fetching image...");
+        const response = await fetch("http://127.0.0.1:8000/result_image");
+        console.log("Response status:", response.status);
+    
+        if (response.ok) {
+          // Assuming the response is an image
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          setImageSrc(url);
+        } else {
+          console.error("Server response not OK");
+          setError("Error loading image. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error loading image:", error);
+        setError("An unexpected error occurred. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (location.pathname === "/UploadedResults") {
+      loadImageSrc();
+    }
+  }, [location.pathname]);
 
   return (
     <div className="mt-5 md:px-14 px-4 py-10 mx-auto bg-[url('./img/Background.png')] bg-cover">
@@ -23,7 +54,7 @@ export const UploadedResults = () => {
                 <img src={logo} alt="logo" />
               </div>
 
-              <div className="h-[180px] flex flex-col justify-center items-center">
+              <div className="h-[180px] flex flex-col justify-center items-center text-center">
                 <h2 className="text-[40px] font-semibold text-primary">
                   Hi I'm Molar Support
                 </h2>
@@ -34,11 +65,15 @@ export const UploadedResults = () => {
 
           {/* Left bottom div */}
           <div className="h-[640px] w-[620px] rounded-[35px] shadow-3x1 p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300 bg-white">
-            {imageUrl && (
+            {/* Display the result image */}
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
               <img
-                src={imageUrl}
-                alt="Uploaded File"
-                className="h-[600px] w-[600px] object-contain"
+                src={imageSrc}
+                alt="Result Image"
+                className="w-[420px] h-[440px] object-contain"
+                onError={(e) => console.error("Error loading image:", e)}
               />
             )}
           </div>
@@ -64,23 +99,13 @@ export const UploadedResults = () => {
               </p>
             </div>
 
-            <div
-              className="mt-8 font-nunito mx-10 text-[20px] font-semibold"
-            >
-              <ul
-                className="list-none"
-              >
+            <div className="mt-8 font-nunito mx-10 text-[20px] font-semibold">
+              <ul className="list-none">
                 <li className="my-3">M3-MC Relation:</li>
                 <li className="my-3">Position:</li>
-                <li className="my-3">
-                  Distance between IAN and tooth:
-                </li>
-                <li className="my-3">
-                  Interruption of Corticalization:
-                </li>
-                <li className="my-3">
-                  Risk of nerve injury:
-                </li>
+                <li className="my-3">Distance between IAN and tooth:</li>
+                <li className="my-3">Interruption of Corticalization:</li>
+                <li className="my-3">Risk of nerve injury:</li>
               </ul>
             </div>
           </div>
