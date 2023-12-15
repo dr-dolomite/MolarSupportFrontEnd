@@ -5,6 +5,7 @@ import IMAGES from "../img/images";
 import { useNavigate } from "react-router-dom";
 import ErrorCard from "./ErrorCard";
 import AcceptCard from "./AcceptCard";
+import UPLOADSVG from "../img/upload.svg";
 
 function Features() {
   const [imageUrl, setImageUrl] = useState(null);
@@ -63,7 +64,7 @@ function Features() {
             </div>
 
             {/* Second Card */}
-            <div className="col-span-1.5 md:col-span-0.75 border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] h-auto shadow-3x1 p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300">
+            <div className="border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] h-auto shadow-3x1 sm:w-[416px] p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300">
               <h3 className="text-[28px] font-semibold text-[#23314C] mx-5 text-center mt-2">
                 You can try these use cases:
               </h3>
@@ -92,23 +93,11 @@ function Features() {
             </div>
 
             {/* Third Card */}
-            <div className="col-span-1.5 md:col-span-0.75 border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] h-[412px] shadow-3x1 p-8 flex justify-center items-center hover:-translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2]">
-              <label
-                htmlFor="fileInput"
-                className="text-2xl font-semibold text-[#23314C] px-5 text-center mt-5 cursor-pointer"
-              >
-                <input
-                  type="file"
-                  id="fileInput"
-                  style={{ display: "none" }}
-                  onChange={handleFileSelection}
-                />
-                <GoUpload
-                  size={70}
-                  className="text-[#F5F5F7]"
-                  onClick={() => document.getElementById("fileInput").click()}
-                />
-              </label>
+            <div className="border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] sm:h-[412px] sm:w-[416px] shadow-3x1 p-8 flex justify-center items-center hover:-translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2]">
+              <div className="flex flex-col justify-center items-center">
+                <img src={UPLOADSVG} alt="upload logo" className="w-[80px] h-[80px] mb-4" />
+                <h2 className="font-nunito font-semibold text-[32px] text-white">Upload Image</h2>
+              </div>
             </div>
           </div>
         </div>
