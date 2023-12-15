@@ -1,14 +1,15 @@
 "use client"; // Importing the "client" module
 
-import { useRef, useState } from "react"; // Importing the "useRef" and "useState" hooks from the "react" module
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import IMAGES from "../img/images";
 
-export default function DragAndDrop() {
+export default function DragAndDrop({ onFileSelection, onDragAndDropError }) {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
-  const inputRef = useRef(null);
+  const [setError] = useState(null); // New state for error
+  const inputRef = useRef(null); // Define inputRef
 
   const openFileExplorer = () => {
     inputRef.current.click();
@@ -53,25 +54,56 @@ export default function DragAndDrop() {
     }
   
     const formData = new FormData();
-    formData.append('file', files[0]);
+    formData.append("file", files[0]);
   
     try {
-      const response = await axios.post('http://127.0.0.1:8000/process_image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/check_valid_cbct",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
   
-      // Handle the response as needed, e.g., update state to display the result image
-      console.log(response.data);
+      console.log("Response from check_valid_cbct:", response.data);
   
-      // Redirect to the UploadedResults page
-      navigate("/UploadedResults");
+      // Check if the image is valid
+      if (response.data && response.data.error) {
+        // If it's an invalid image, set the error state
+        setError(response.data.error);
+
+                // Call the callback function to inform Features about the error
+                onDragAndDropError();
+      } else {
+        // If it's a valid image, proceed with processing
+        setError(null); // Reset error state
+        const processResponse = await axios.post(
+          "http://127.0.0.1:8000/process_image",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+  
+        console.log("Response from process_image:", processResponse.data);
+  
+        // Handle the response as needed, e.g., update state to display the result image
+        console.log(processResponse.data);
+  
+        // Redirect to the UploadedResults page
+        navigate("/UploadedResults");
+      }
     } catch (error) {
       // Handle errors
       console.error(error);
+      setError("An error occurred while processing the image.");
     }
   };
+  
 
   return (
     <div className="flex h-screen flex-col justify-center items-center">
@@ -81,8 +113,9 @@ export default function DragAndDrop() {
         className="w-[108px] h-[104px] cursor-pointer"
         onClick={openFileExplorer}
       />
+
       <form
-        className='m-8 gap-y-8 grid grid-cols-1 place-content-center max-w-lg text-center'
+        className="m-8 gap-y-8 grid grid-cols-1 place-content-center max-w-lg text-center"
         onDragEnter={handleDragEnter}
         onSubmit={(e) => e.preventDefault()}
         onDrop={handleDrop}
@@ -109,7 +142,7 @@ export default function DragAndDrop() {
                   </span>
                   <span
                     className="text-red-500 cursor-pointer font-bold text-[18px] font-nunito"
-                    onClick={removeFile}
+                    onClick={() => removeFile(idx)}
                   >
                     remove
                   </span>
