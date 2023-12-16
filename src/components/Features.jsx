@@ -95,8 +95,14 @@ function Features() {
             {/* Third Card */}
             <div className="border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] sm:h-[412px] sm:w-[416px] shadow-3x1 p-8 flex justify-center items-center hover:-translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2]">
               <div className="flex flex-col justify-center items-center">
-                <img src={UPLOADSVG} alt="upload logo" className="w-[80px] h-[80px] mb-4" />
-                <h2 className="font-nunito font-semibold text-[32px] text-white">Upload Image</h2>
+                <img
+                  src={UPLOADSVG}
+                  alt="upload logo"
+                  className="w-[80px] h-[80px] mb-4"
+                />
+                <h2 className="font-nunito font-semibold text-[32px] text-white">
+                  Upload Image
+                </h2>
               </div>
             </div>
           </div>
@@ -110,6 +116,7 @@ function Features() {
               onFileSelection={handleFileSelection}
               onDragAndDropError={handleDragAndDropError}
               onDragAndDropAccept={handleDragAndDropAccept}
+              onAssessmentStart={handleAssessmentStart}
             />
           </div>
         </div>
