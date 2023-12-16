@@ -8,6 +8,7 @@ export const UploadedResults = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const [message, setMessage] = useState(null); // New state for the message
 
   useEffect(() => {
     console.log("Location:", location.pathname);
@@ -17,12 +18,27 @@ export const UploadedResults = () => {
         console.log("Fetching image...");
         const response = await fetch("http://127.0.0.1:8000/result_image");
         console.log("Response status:", response.status);
-    
+
         if (response.ok) {
           // Assuming the response is an image
           const blob = await response.blob();
           const url = URL.createObjectURL(blob);
           setImageSrc(url);
+
+          /// Fetch message from corticilization_type endpoint
+          const responseMessage = await fetch(
+            "http://127.0.0.1:8000/corticilization_type",
+            {
+              method: "POST",
+              body: new FormData(),
+            }
+          );
+          if (!responseMessage.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching message. Please try again.");
+          }
+          const messageData = await responseMessage.json();
+          setMessage(messageData.message);
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -67,16 +83,16 @@ export const UploadedResults = () => {
           <div className="h-[640px] w-[620px] rounded-[35px] shadow-3x1 p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300 bg-white">
             {/* Display the result image */}
             <div className="outline-dashed outline-offset-[40px] rounded-[24px] outline-[#23314C]">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <img
-                src={imageSrc}
-                alt="Result Image"
-                className="w-[420px] h-[440px] object-contain"
-                onError={(e) => console.error("Error loading image:", e)}
-              />
-            )}
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <img
+                  src={imageSrc}
+                  alt="Result Image"
+                  className="w-[420px] h-[440px] object-contain"
+                  onError={(e) => console.error("Error loading image:", e)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -106,7 +122,9 @@ export const UploadedResults = () => {
                 <li className="my-3">M3-MC Relation:</li>
                 <li className="my-3">Position:</li>
                 <li className="my-3">Distance between IAN and tooth:</li>
-                <li className="my-3">Interruption of Corticalization:</li>
+                <li className="my-3">
+                  Interruption of Corticalization: {message}
+                </li>
                 <li className="my-3">Risk of nerve injury:</li>
               </ul>
             </div>
