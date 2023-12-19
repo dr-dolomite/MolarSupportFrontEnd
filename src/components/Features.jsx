@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DragAndDrop from "./DragandDrop";
 import { GoUpload } from "react-icons/go";
 import IMAGES from "../img/images";
@@ -12,6 +12,9 @@ function Features() {
   const navigate = useNavigate();
   const [errorVisible, setErrorVisible] = useState(false);
   const [acceptVisible, setAcceptVisible] = useState(false);
+  const [dragAndDropImageLocal, setDragAndDropImageLocal] = useState(null);
+
+  const fileInputRef = useRef(null);
 
   function handleFileSelection(e) {
     const file = e.target.files[0];
@@ -19,12 +22,81 @@ function Features() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageUrl(imageUrl);
+      setDragAndDropImageLocal(imageUrl); // Store image for DragAndDrop
+      handleDragAndDropType(file);
+      closeError();
+    }
+  }
+
+  // New function for handling file drop
+  function handleDrop(e) {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImageUrl(imageUrl);
+      setDragAndDropImageLocal(imageUrl); // Store image for DragAndDrop
+      closeError();
+      handleDragAndDropType(file);
+    } else {
+      // Handle no file dropped
+      console.log("No file dropped");
+      closeError();
     }
   }
 
   function closeError() {
     setErrorVisible(false);
     setAcceptVisible(false);
+  }
+
+  function handleFileClick() {
+    // Trigger click on the file input when the upload logo is clicked
+    fileInputRef.current.click();
+  }
+
+  // New function to handle errors triggered by DragAndDrop
+  function handleDragAndDropType(file) {
+    // Create a FormData object to send the file as multipart/form-data
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Make a POST request to the FastAPI endpoint
+    fetch("http://127.0.0.1:8000/check_valid_cbct_mc", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Check the response and take appropriate action
+        if ("error" in data) {
+          // Show the ErrorCard
+          setErrorVisible(true);
+        } else {
+          // Do nothing or take additional actions if needed
+          //
+        }
+      })
+      .catch((error) => {
+        console.error("Error while making the request:", error);
+        // Handle errors if needed
+      });
+  }
+
+  // New function for handling drag enter
+  function handleDragEnter(e) {
+    e.preventDefault();
+  }
+
+  // New function for handling drag over
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleAssessmentStart() {
+    // Redirect to UploadedResults
+    navigate("/UploadedResults");
   }
 
   // New function to handle errors triggered by DragAndDrop
@@ -36,12 +108,6 @@ function Features() {
   function handleDragAndDropAccept() {
     setAcceptVisible(true);
   }
-
-  function handleAssessmentStart() {
-    // Redirect to UploadedResults
-    navigate("/UploadedResults");
-  }
-
   return (
     <div className='my-24 md:px-14 px-4 max-w-screen-2xl mx-auto bg-[url("./img/Background.png")] bg-cover'>
       <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
@@ -92,17 +158,41 @@ function Features() {
               </div>
             </div>
 
-            {/* Third Card */}
-            <div className="border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] sm:h-[412px] sm:w-[416px] shadow-3x1 p-8 flex justify-center items-center hover:-translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2]">
-              <div className="flex flex-col justify-center items-center">
-                <img
-                  src={UPLOADSVG}
-                  alt="upload logo"
-                  className="w-[80px] h-[80px] mb-4"
+            <div
+              className="border-solid border-2 border-black-600 bg-[rgba(255,255,255,0.04)] rounded-[35px] sm:h-[412px] sm:w-[416px] shadow-3x1 p-8 flex justify-center items-center hover:-translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2]"
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              <div className="flex flex-col justify-center items-center text-center">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="selected image"
+                    className="w-[400px] h-[400px] object-contain"
+                  />
+                ) : (
+                  <>
+                    <img
+                      src={UPLOADSVG}
+                      alt="upload logo"
+                      className="w-[80px] h-[80px] mb-4 cursor-pointer"
+                      onClick={handleFileClick}
+                    />
+
+                    <h2 className="font-nunito font-semibold text-[24px] max-w-[200px] text-white">
+                      Upload The MC Masked Image
+                    </h2>
+                  </>
+                )}
+
+                {/* Hidden input for file selection */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleFileSelection}
                 />
-                <h2 className="font-nunito font-semibold text-[32px] text-white">
-                  Upload Image
-                </h2>
               </div>
             </div>
           </div>
@@ -113,14 +203,13 @@ function Features() {
           <div className="m-5 outline-dashed outline-2 rounded-[35px] outline-[#23314C]">
             {/* Pass onDragAndDropError to DragAndDrop */}
             <DragAndDrop
-              onFileSelection={handleFileSelection}
               onDragAndDropError={handleDragAndDropError}
               onDragAndDropAccept={handleDragAndDropAccept}
-              onAssessmentStart={handleAssessmentStart}
             />
           </div>
         </div>
-        {/* Display the ErrorCard and Accept Card conditionally */}
+
+        {/* Display the ErrorCard conditionally */}
         {errorVisible && <ErrorCard onClose={closeError} />}
 
         {acceptVisible && (

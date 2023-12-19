@@ -8,7 +8,6 @@ export const UploadedResults = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const [message, setMessage] = useState(null); // New state for the message
 
   useEffect(() => {
     console.log("Location:", location.pathname);
@@ -16,30 +15,15 @@ export const UploadedResults = () => {
     const loadImageSrc = async () => {
       try {
         console.log("Fetching image...");
-        const response = await fetch("http://127.0.0.1:8000/result_image");
+        const response = await fetch("http://127.0.0.1:8000/sample1");
         console.log("Response status:", response.status);
 
         if (response.ok) {
           // Assuming the response is an image
-          const blob = await response.blob();
-          const originalImageUrl = "http://127.0.0.1:8000/result_image";
+          const originalImageUrl = "http://127.0.0.1:8000/sample1";
           const url = `${originalImageUrl}?timestamp=${new Date().getTime()}`;
           setImageSrc(url);
 
-          /// Fetch message from corticilization_type endpoint
-          const responseMessage = await fetch(
-            "http://127.0.0.1:8000/corticilization_type",
-            {
-              method: "POST",
-              body: new FormData(),
-            }
-          );
-          if (!responseMessage.ok) {
-            console.error("Server response not OK");
-            throw new Error("Error fetching message. Please try again.");
-          }
-          const messageData = await responseMessage.json();
-          setMessage(messageData.message);
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -52,7 +36,7 @@ export const UploadedResults = () => {
       }
     };
 
-    if (location.pathname === "/UploadedResults") {
+    if (location.pathname === "/Sample1") {
       loadImageSrc();
     }
   }, [location.pathname]);

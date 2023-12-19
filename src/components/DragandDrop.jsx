@@ -1,17 +1,13 @@
 "use client"; // Importing the "client" module
 
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import IMAGES from "../img/images";
 
 export default function DragAndDrop({
-  onFileSelection,
   onDragAndDropError,
   onDragAndDropAccept,
-  onAssessmentStart,
 }) {
-  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null); // New state for error
   const inputRef = useRef(null); // Define inputRef
@@ -100,9 +96,6 @@ export default function DragAndDrop({
 
         // Handle the response as needed, e.g., update state to display the result image
         console.log(processResponse.data);
-
-        // Redirect to the UploadedResults page using the provided callback
-        onAssessmentStart();
       }
     } catch (error) {
       // Handle errors
@@ -158,7 +151,9 @@ export default function DragAndDrop({
               </div>
             ))
           ) : (
-            <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">No files selected</p>
+            <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">
+              No files selected
+            </p>
           )}
         </div>
 
