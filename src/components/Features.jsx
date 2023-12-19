@@ -117,7 +117,7 @@ function Features() {
             {/* First Card */}
             <div className="col-span-3 md:col-span-1.5 border-solid border-2 border-black-600 bg-[#F5F5F7]/90 rounded-[35px] h-[532px] w-auto shadow-3x1 p-2 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300">
               <div className="font-nunito mx-10">
-                <h2 className="text-[55px] font-semibold text-[#23314C] mb-20">
+                <h2 className="text-[55px] font-semibold text-[#23314C] mb-10">
                   Mandibular Third Molar (M3) Nerve Injury
                   <span className="text-[#CC76E2]"> Risk Evaluator.</span>
                 </h2>
@@ -126,6 +126,16 @@ function Features() {
                   preoperative nerve injury risk assessment in mandibular third
                   molar extraction.
                 </p>
+
+                <div className="flex flex-row items-center mt-10">
+                <input
+                  type="text"
+                  placeholder="IAN Distance (mm)"
+                  className="p-2 px-4 border-solid border-2 border-[#735ac8] focus:outline-[#CC76E2] rounded-md font-nunito text-[16px] font-normal"
+                />
+                <p className="italic font-nunito text-[14px] ml-4 font-semibold">Please refer to the CBCT reader.</p>
+                </div>
+
               </div>
             </div>
 
