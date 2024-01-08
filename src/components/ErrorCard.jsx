@@ -47,7 +47,7 @@ const ErrorCard = () => {
             </div>
             <div className="mt-3 text-center sm:mt-5">
               <h3
-                className="text-[56px] font-bold text-[#DC6803] font-nunito"
+                className="text-[56px] font-bold text-[#3F3375] font-nunito"
                 id="modal-headline"
               >
                 Oops!
@@ -61,7 +61,7 @@ const ErrorCard = () => {
           </div>
           <div className="mt-5 sm:mt-6">
             <button
-              className="inline-flex justify-center w-full rounded-[35px] border border-transparent shadow-sm px-4 py-4 bg-[#DC6803] text-base font-semibold text-white font-nunito hover:bg-[#DC6803]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-[24px]"
+              className="inline-flex justify-center w-full rounded-[35px] border border-transparent shadow-sm px-4 py-4 bg-[#595080] text-base font-semibold text-white font-nunito hover:bg-[#595080]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:text-[24px]"
               onClick={closeModal}
             >
               Try Again

@@ -55,13 +55,13 @@ const AcceptCard = ({ onClose }) => {
               </div>
               <div className="mt-3 text-center sm:mt-5">
                 <h3
-                  className="text-[56px] font-bold text-[#47D5C4] font-nunito"
+                  className="text-[56px] font-bold text-[#6D58C6] font-nunito"
                   id="modal-headline"
                 >
                   Nice!
                 </h3>
                 <div className="mt-2 text-center flex justify-center">
-                  <p className="text-[20px] font-nunito text-[#667085] font-semibold sm:max-w-sm">
+                  <p className="text-[20px] font-nunito text-[#6D58C6] font-semibold sm:max-w-sm">
                     Image uploaded was a CBCT M3 Axial slice image
                   </p>
                 </div>
@@ -69,7 +69,7 @@ const AcceptCard = ({ onClose }) => {
             </div>
             <div className="mt-5 sm:mt-6">
               <button
-                className="inline-flex justify-center w-full rounded-[35px] border border-transparent shadow-sm px-4 py-4 bg-[#47D5C4] text-base font-semibold text-white font-nunito hover:bg-[#47D5C4]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47D5C4] sm:text-[24px]"
+                className="inline-flex justify-center w-full rounded-[35px] border border-transparent shadow-sm px-4 py-4 bg-gradient-to-r from-[#6D58C6] to-[#CC76E2] text-base font-semibold text-white font-nunito hover:bg-[#47D5C4]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#47D5C4] sm:text-[24px]"
                 onClick={startAssessment}
               >
                 Let’s start assessment

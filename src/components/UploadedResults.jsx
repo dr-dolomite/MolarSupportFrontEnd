@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import logo from "../img/Circle logo.png";
+import cortiTooth from "../img/cortiTooth.png";
+import positionLogo from "../img/positionLogo.png";
 import { LuRefreshCw } from "react-icons/lu";
-import { RiRectangleFill } from "react-icons/ri";
+import { RiSquareFill } from "react-icons/ri";
 import { useLocation, Link } from "react-router-dom";
 
 export const UploadedResults = () => {
@@ -47,7 +49,6 @@ export const UploadedResults = () => {
             throw new Error("Error fetching message. Please try again.");
           }
 
-
           const responsePosition = await fetch(
             "http://127.0.0.1:8000/position_prediction",
             {
@@ -71,25 +72,18 @@ export const UploadedResults = () => {
           console.log("POST Interruption:", postInterruption);
           console.log("POST Position:", postPosition);
 
-          
           // Get the values from GET endpoints
-          const getDistance = await fetch(
-            "http://127.0.0.1:8000/getDistance",
-            {
-              method: "GET",
-            }
-          );
+          const getDistance = await fetch("http://127.0.0.1:8000/getDistance", {
+            method: "GET",
+          });
           if (!getDistance.ok) {
             console.error("Server response not OK");
             throw new Error("Error fetching distance. Please try again.");
           }
-          
-          const getPosition = await fetch(
-            "http://127.0.0.1:8000/getPosition",
-            {
-              method: "GET",
-            }
-          );
+
+          const getPosition = await fetch("http://127.0.0.1:8000/getPosition", {
+            method: "GET",
+          });
           if (!getPosition.ok) {
             console.error("Server response not OK");
             throw new Error("Error fetching position. Please try again.");
@@ -114,7 +108,6 @@ export const UploadedResults = () => {
           setDistance(distance.distance);
           setPosition(position.position);
           setInterruption(interruption.interruption);
-
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -178,11 +171,86 @@ export const UploadedResults = () => {
 
         <div className="flex flex-col max-w-[820px] gap-y-[40px]">
           {/* Right top div */}
-          <div className="w-[680px] h-[580px] rounded-[35px] shadow-3x1 p-8 flex flex-col hover:-translate-y-4 transition-all duration-300 bg-white">
-                <div></div>
+          <div className="w-[680px] h-[580px] rounded-[35px] shadow-3x1 flex flex-col hover:-translate-y-4 transition-all duration-300 bg-white">
+            <div className="w-full h-[220px] bg-[#E9E4FC] rounded-t-[35px]">
+              <div className="flex flex-col p-8 ml-28 justify-center h-full">
+                <div className="flex flex-row items-center my-2">
+                  <RiSquareFill className="rounded-[14px] text-[50px] text-[#419e59] mr-4" />
+                  <p className="text-[32px] text-[#23314C] font-normal font-nunito">
+                    Mandibular Third Molar
+                  </p>
+                </div>
+
+                <div className="flex flex-row items-center my-2">
+                  <RiSquareFill className="rounded-[14px] text-[50px] text-[#792879] mr-4" />
+                  <p className="text-[32px] text-[#23314C] font-normal font-nunito">
+                    Mandibular Canal
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-center p-8">
+                <div className="flex flex-col items-center h-full mr-14">
+                  <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
+                    M3-MC Relation:
+                  </p>
+                  <p className="text-[32px] text-[#23314C] font-bold font-nunito">
+                    Class 1A
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center h-full ml-14">
+                  <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
+                    Interruption:
+                  </p>
+                  <div className="flex flex-row items-center h-full">
+                    <img
+                      src={cortiTooth}
+                      alt="cortiToothImage"
+                      className="w-[32px] h-[32px] mx-2"
+                    />
+                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                      {interruption}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-center p-8">
+
+                <div className="flex flex-col items-center h-full mr-14">
+                  <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
+                    Position:
+                  </p>
+                  <div className="flex flex-row items-center h-full">
+                    <img
+                      src={positionLogo}
+                      alt="cortiToothImage"
+                      className="w-[32px] h-[32px] mx-2"
+                    />
+                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                      {position}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center h-full ml-14">
+                  <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
+                    Risk:
+                  </p>
+                  <div className="rounded-[40px] p-2 px-6 bg-[#F9D3CD]">
+                    <p className="text-[32px] text-[#EC432A] font-bold font-nunito">
+                    N.3 High
+                  </p>
+                  </div>
+                  
+                </div>
 
 
-            <div className="flex flex-row gap-x-6 font-nunito text-[#23314C] text-[28px] justify-center mt-20 ">
+              </div>
+            </div>
+
+            {/*} <div className="flex flex-row gap-x-6 font-nunito text-[#23314C] text-[28px] justify-center mt-20 ">
               <p className="text-left text-2xl font-semibold text-primary mb-3 flex items-center">
                 <RiRectangleFill
                   className="mr-2"
@@ -211,7 +279,7 @@ export const UploadedResults = () => {
                 </li>
                 <li className="my-3">Risk of nerve injury:</li>
               </ul>
-            </div>
+              </div>*/}
           </div>
 
           {/* Right bottom div */}
