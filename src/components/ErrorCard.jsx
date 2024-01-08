@@ -54,7 +54,7 @@ const ErrorCard = () => {
               </h3>
               <div className="mt-2 text-center flex justify-center">
                 <p className="text-[20px] font-nunito text-[#667085] font-semibold sm:max-w-sm">
-                  Image uploaded was not a CBCT M3 Axial slice image
+                  The image uploaded was not a valid input.
                 </p>
               </div>
             </div>

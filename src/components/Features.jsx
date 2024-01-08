@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DragAndDrop from "./DragandDrop";
-import { GoUpload } from "react-icons/go";
 import IMAGES from "../img/images";
 import { useNavigate } from "react-router-dom";
 import ErrorCard from "./ErrorCard";
@@ -13,7 +12,8 @@ function Features() {
   const [errorVisible, setErrorVisible] = useState(false);
   const [acceptVisible, setAcceptVisible] = useState(false);
   const [dragAndDropImageLocal, setDragAndDropImageLocal] = useState(null);
-
+  const [distance, setDistance] = useState("");
+  const [result, setResult] = useState("");
   const fileInputRef = useRef(null);
 
   function handleFileSelection(e) {
@@ -94,9 +94,19 @@ function Features() {
     e.preventDefault();
   }
 
+  function checkInputs() {
+    // Checks if CBCT image, MC image and IAN distance are provided
+    if (imageUrl && dragAndDropImageLocal) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function handleAssessmentStart() {
-    // Redirect to UploadedResults
-    navigate("/UploadedResults");
+    if (checkInputs()) {
+      navigate("/UploadedResults");
+    }
   }
 
   // New function to handle errors triggered by DragAndDrop
@@ -108,6 +118,37 @@ function Features() {
   function handleDragAndDropAccept() {
     setAcceptVisible(true);
   }
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/calculate_distance",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ distance: parseFloat(distance) }),
+          }
+        );
+
+        const data = await response.json();
+        setResult(data.result);
+
+        // Display the result
+        console.log("Result:", data.result);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    // Send the request when the distance changes
+    if (distance !== "") {
+      sendRequest();
+    }
+  }, [distance]);
+
   return (
     <div className='my-24 md:px-14 px-4 max-w-screen-2xl mx-auto bg-[url("./img/Background.png")] bg-cover'>
       <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
@@ -128,14 +169,17 @@ function Features() {
                 </p>
 
                 <div className="flex flex-row items-center mt-10">
-                <input
-                  type="text"
-                  placeholder="IAN Distance (mm)"
-                  className="p-2 px-4 border-solid border-2 border-[#735ac8] focus:outline-[#CC76E2] rounded-md font-nunito text-[16px] font-normal"
-                />
-                <p className="italic font-nunito text-[14px] ml-4 font-semibold">Please refer to the CBCT reader.</p>
+                  <input
+                    type="text"
+                    placeholder="IAN Distance (mm)"
+                    className="p-2 px-4 border-solid border-2 border-[#735ac8] focus:outline-[#CC76E2] rounded-md font-nunito text-[16px] font-normal"
+                    value={distance}
+                    onChange={(e) => setDistance(e.target.value)}
+                  />
+                  <p className="italic font-nunito text-[14px] ml-4 font-semibold">
+                    Please refer to the CBCT reader.
+                  </p>
                 </div>
-
               </div>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, setError } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../img/Circle logo.png";
 import { LuRefreshCw } from "react-icons/lu";
 import { RiRectangleFill } from "react-icons/ri";
@@ -7,8 +7,16 @@ import { useLocation, Link } from "react-router-dom";
 export const UploadedResults = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const location = useLocation();
-  const [message, setMessage] = useState(null); // New state for the message
+
+  const [distance, setDistance] = useState(null);
+  const [position, setPosition] = useState(null);
+  const [interruption, setInterruption] = useState(null);
+  const [error, setError] = useState(null); // New state for the error
+
+  const [postPosition, setPostPosition] = useState(null);
+  const [postInterruption, setPostInterruption] = useState(null);
 
   useEffect(() => {
     console.log("Location:", location.pathname);
@@ -21,25 +29,92 @@ export const UploadedResults = () => {
 
         if (response.ok) {
           // Assuming the response is an image
-          const blob = await response.blob();
+          //const blob = await response.blob();
           const originalImageUrl = "http://127.0.0.1:8000/result_image";
           const url = `${originalImageUrl}?timestamp=${new Date().getTime()}`;
           setImageSrc(url);
 
-          /// Fetch message from corticilization_type endpoint
-          const responseMessage = await fetch(
+          // Make predictions by calling the API endpoints
+          const responseInterruption = await fetch(
             "http://127.0.0.1:8000/corticilization_type",
             {
               method: "POST",
               body: new FormData(),
             }
           );
-          if (!responseMessage.ok) {
+          if (!responseInterruption.ok) {
             console.error("Server response not OK");
             throw new Error("Error fetching message. Please try again.");
           }
-          const messageData = await responseMessage.json();
-          setMessage(messageData.message);
+
+
+          const responsePosition = await fetch(
+            "http://127.0.0.1:8000/position_prediction",
+            {
+              method: "POST",
+              body: new FormData(),
+            }
+          );
+          if (!responsePosition.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching position. Please try again.");
+          }
+
+          // Get POST endpoints
+          const postInterruption = await responseInterruption.json();
+          const postPosition = await responsePosition.json();
+
+          setPostInterruption(postInterruption.postInterruption);
+          setPostPosition(postPosition.postPosition);
+
+          // Console log the POST endpoints
+          console.log("POST Interruption:", postInterruption);
+          console.log("POST Position:", postPosition);
+
+          
+          // Get the values from GET endpoints
+          const getDistance = await fetch(
+            "http://127.0.0.1:8000/getDistance",
+            {
+              method: "GET",
+            }
+          );
+          if (!getDistance.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching distance. Please try again.");
+          }
+          
+          const getPosition = await fetch(
+            "http://127.0.0.1:8000/getPosition",
+            {
+              method: "GET",
+            }
+          );
+          if (!getPosition.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching position. Please try again.");
+          }
+
+          const getInterruption = await fetch(
+            "http://127.0.0.1:8000/getInterruption",
+            {
+              method: "GET",
+            }
+          );
+          if (!getInterruption.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching interruption. Please try again.");
+          }
+
+          // store the values in the states but make sure that the values are all loaded
+          const distance = await getDistance.json();
+          const position = await getPosition.json();
+          const interruption = await getInterruption.json();
+
+          setDistance(distance.distance);
+          setPosition(position.position);
+          setInterruption(interruption.interruption);
+
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -85,7 +160,10 @@ export const UploadedResults = () => {
             {/* Display the result image */}
             <div className="outline-dashed outline-offset-[40px] rounded-[24px] outline-[#23314C]">
               {loading ? (
-                <p className="font-nunito text-semibold italic sm:text-lg text-md">Loading...</p>
+                <p className="font-nunito text-semibold italic sm:text-lg text-md">
+                  {error || "Loading..."}{" "}
+                  {/* Display the error message if present */}
+                </p>
               ) : (
                 <img
                   src={imageSrc}
@@ -101,6 +179,9 @@ export const UploadedResults = () => {
         <div className="flex flex-col max-w-[820px] gap-y-[40px]">
           {/* Right top div */}
           <div className="w-[680px] h-[580px] rounded-[35px] shadow-3x1 p-8 flex flex-col hover:-translate-y-4 transition-all duration-300 bg-white">
+                <div></div>
+
+
             <div className="flex flex-row gap-x-6 font-nunito text-[#23314C] text-[28px] justify-center mt-20 ">
               <p className="text-left text-2xl font-semibold text-primary mb-3 flex items-center">
                 <RiRectangleFill
@@ -121,10 +202,12 @@ export const UploadedResults = () => {
             <div className="mt-8 font-nunito mx-10 text-[20px] font-semibold">
               <ul className="list-none">
                 <li className="my-3">M3-MC Relation:</li>
-                <li className="my-3">Position:</li>
-                <li className="my-3">Distance between IAN and tooth:</li>
+                <li className="my-3">Position: {position}</li>
                 <li className="my-3">
-                  Interruption of Corticalization: {message}
+                  Distance between IAN and tooth: {distance}
+                </li>
+                <li className="my-3">
+                  Interruption of Corticalization: {interruption}
                 </li>
                 <li className="my-3">Risk of nerve injury:</li>
               </ul>

@@ -92,10 +92,10 @@ export default function DragAndDrop({
           }
         );
 
-        console.log("Response from process_image:", processResponse.data);
+        //console.log("Response from process_image:", processResponse.data);
 
         // Handle the response as needed, e.g., update state to display the result image
-        console.log(processResponse.data);
+        //console.log(processResponse.data);
       }
     } catch (error) {
       // Handle errors
@@ -109,7 +109,7 @@ export default function DragAndDrop({
       <img
         src={IMAGES.toothLogo}
         alt="tooth"
-        className="w-[108px] h-[104px] cursor-pointer"
+        className="w-[108px] h-[104px] hover:w-[124px] hover:h-[120px] ease-in-out duration-300 cursor-pointer"
         onClick={openFileExplorer}
       />
 
