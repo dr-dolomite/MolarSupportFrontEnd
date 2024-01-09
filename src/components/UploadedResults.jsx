@@ -15,6 +15,9 @@ export const UploadedResults = () => {
   const [distance, setDistance] = useState(null);
   const [position, setPosition] = useState(null);
   const [interruption, setInterruption] = useState(null);
+  const [relation, setRelation] = useState(null);
+  const [risk, setRisk] = useState(null);
+
   const [error, setError] = useState(null); // New state for the error
 
   const [postPosition, setPostPosition] = useState(null);
@@ -100,14 +103,34 @@ export const UploadedResults = () => {
             throw new Error("Error fetching interruption. Please try again.");
           }
 
+          const getRelation = await fetch("http://127.0.0.1:8000/getRelation", {
+            method: "GET",
+          });
+          if (!getRelation.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching relation. Please try again.");
+          }
+
+          const getRisk = await fetch("http://127.0.0.1:8000/getRisk", {
+            method: "GET",
+          });
+          if (!getRisk.ok) {
+            console.error("Server response not OK");
+            throw new Error("Error fetching risk. Please try again.");
+          }
+
           // store the values in the states but make sure that the values are all loaded
           const distance = await getDistance.json();
           const position = await getPosition.json();
           const interruption = await getInterruption.json();
+          const relation = await getRelation.json();
+          const risk = await getRisk.json();
 
           setDistance(distance.distance);
           setPosition(position.position);
           setInterruption(interruption.interruption);
+          setRelation(relation.relation);
+          setRisk(risk.risk);
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -124,6 +147,43 @@ export const UploadedResults = () => {
       loadImageSrc();
     }
   }, [location.pathname]);
+
+  let riskBgColor;
+  let riskTextColor;
+
+  // Function to determine the class names based on risk level
+  const getRiskStyles = (risk) => {
+    switch (risk) {
+      case "N.0 (Non-determinant)":
+        return {
+          backgroundColor: "#58C5C080",
+          textColor: "#30BCB5",
+        };
+      case "N.1 (Low)":
+        return {
+          backgroundColor: "#87CF7580",
+          textColor: "#6ABC55",
+        };
+      case "N.2 (Medium)":
+        return {
+          backgroundColor: "#F0993F80",
+          textColor: "#F0871A",
+        };
+      case "N.3 (High)":
+        return {
+          backgroundColor: "#E9503980",
+          textColor: "#EC432A",
+        };
+      default:
+        return {
+          backgroundColor: "#58C5C080",
+          textColor: "#30BCB5",
+        };
+    }
+  };
+
+  // Get the styles based on the risk level
+  const { backgroundColor, textColor } = getRiskStyles(risk);
 
   return (
     <div className="mt-5 md:px-14 px-4 py-10 mx-auto bg-[url('./img/Background.png')] bg-cover">
@@ -153,8 +213,8 @@ export const UploadedResults = () => {
             {/* Display the result image */}
             <div className="outline-dashed outline-offset-[40px] rounded-[24px] outline-[#23314C]">
               {loading ? (
-                <p className="font-nunito text-semibold italic sm:text-lg text-md">
-                  {error || "Loading..."}{" "}
+                <p className="font-nunito font-semibold italic text-[32px] p-4">
+                  {error ? error : "Waiting for image..."}
                   {/* Display the error message if present */}
                 </p>
               ) : (
@@ -194,9 +254,15 @@ export const UploadedResults = () => {
                   <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
                     M3-MC Relation:
                   </p>
-                  <p className="text-[32px] text-[#23314C] font-bold font-nunito">
-                    Class 1A
-                  </p>
+                  {relation !== null ? (
+                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                      {relation}
+                    </p>
+                  ) : (
+                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                      Loading...
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-center h-full ml-14">
@@ -209,16 +275,21 @@ export const UploadedResults = () => {
                       alt="cortiToothImage"
                       className="w-[32px] h-[32px] mx-2"
                     />
-                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
-                      {interruption}
-                    </p>
+                    {interruption !== null ? (
+                      <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                        {interruption}
+                      </p>
+                    ) : (
+                      <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                        Loading...
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-row justify-center p-8">
-
-                <div className="flex flex-col items-center h-full mr-14">
+              <div className="flex flex-row justify-center p-6">
+                <div className="flex flex-col items-center h-full mr-[54px]">
                   <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
                     Position:
                   </p>
@@ -228,25 +299,38 @@ export const UploadedResults = () => {
                       alt="cortiToothImage"
                       className="w-[32px] h-[32px] mx-2"
                     />
-                    <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
-                      {position}
-                    </p>
+                    {position !== null ? (
+                      <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                        {position}
+                      </p>
+                    ) : (
+                      <p className="text-[32px] text-[#23314C] font-bold font-nunito mx-2">
+                        Loading...
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center h-full ml-14">
+                <div className="flex flex-col items-center h-full ml-[54px]">
                   <p className="text-[24px] text-[#5A6579] font-normal font-nunito mb-2">
                     Risk:
                   </p>
-                  <div className="rounded-[40px] p-2 px-6 bg-[#F9D3CD]">
-                    <p className="text-[32px] text-[#EC432A] font-bold font-nunito">
-                    N.3 High
-                  </p>
+                  <div
+                    className={`rounded-[40px] p-2 px-6 bg-[${backgroundColor}]`}
+                  >
+                    {risk !== null ? (
+                      <p
+                        className={`text-[32px] text-[${textColor}] font-bold font-nunito`}
+                      >
+                        {risk}
+                      </p>
+                    ) : (
+                      <p className="text-[32px] text-[#30BCB5] font-bold font-nunito">
+                        Loading...
+                      </p>
+                    )}
                   </div>
-                  
                 </div>
-
-
               </div>
             </div>
 
