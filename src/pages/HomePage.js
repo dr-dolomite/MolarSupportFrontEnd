@@ -1,17 +1,14 @@
 import { Navbar } from '../components/Navbar';
 import '../App.css';
 import Features from '../components/Features';
-import backgroundImage from "../img/Background.png";
+import backgroundImage from "../img/bg-testc.png";
 
 
 export const HomePage = () => {
     return (
-        <>
-        <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
+        <div>
             <Navbar></Navbar>
             <Features></Features>
-            
         </div>
-        </>
     )
 }

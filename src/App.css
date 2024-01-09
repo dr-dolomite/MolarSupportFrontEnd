@@ -42,3 +42,8 @@
 .font-nunito {
   font-family: 'Nunito', sans-serif;
 }
+
+body {
+  background-image: url("./img/bg-testb.png");
+  background-size: cover;
+}

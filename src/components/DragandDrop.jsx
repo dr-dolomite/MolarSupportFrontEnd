@@ -128,7 +128,7 @@ export default function DragAndDrop({
         {files.length === 0 && (
           <div className="flex flex-col justify-center items-center cursor-pointer">
             <p
-              className="font-nunito text-[24px] text-primary font-semibold"
+              className="font-nunito text-[24px] text-white font-semibold"
               onClick={openFileExplorer}
             >
               Drag & Drop to Upload the CBCT M3 Axial Slice image
@@ -167,7 +167,7 @@ export default function DragAndDrop({
               </div>
             ))
           ) : (
-            <p className="font-nunito font-normal text-[24px] text-primary text-ellipsis overflow-hidden">
+            <p className="font-nunito font-normal text-[24px] text-white text-ellipsis overflow-hidden">
               No file selected
             </p>
           )}
