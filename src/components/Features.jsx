@@ -119,7 +119,7 @@ function Features() {
     setAcceptVisible(true);
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     const sendRequest = async () => {
       try {
         const response = await fetch(
@@ -147,7 +147,7 @@ function Features() {
     if (distance !== "") {
       sendRequest();
     }
-  }, [distance]);
+  }, [distance]); */
 
   return (
     <div className='my-24 md:px-14 px-4 max-w-screen-2xl mx-auto bg-cover'>
@@ -168,7 +168,7 @@ function Features() {
                   molar extraction.
                 </p>
 
-                <div className="flex flex-row items-center mt-10">
+               {/*} <div className="flex flex-row items-center mt-10">
                   <input
                     type="text"
                     placeholder="IAN Distance (mm)"
@@ -179,7 +179,7 @@ function Features() {
                   <p className="italic font-nunito text-[14px] ml-4 font-semibold">
                     Please refer to the CBCT reader.
                   </p>
-                </div>
+  </div> */}
 
               </div>
             </div>

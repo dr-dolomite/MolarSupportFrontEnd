@@ -8,7 +8,7 @@ import { RiSquareFill } from "react-icons/ri";
 import { useLocation, Link } from "react-router-dom";
 
 export const UploadedResults = () => {
-  const [imageSrc, setImageSrc] = useState(null);
+  const [ImageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const location = useLocation();
@@ -133,6 +133,7 @@ export const UploadedResults = () => {
           setInterruption(interruption.interruption);
           setRelation(relation.relation);
           setRisk(risk.risk);
+
         } else {
           console.error("Server response not OK");
           setError("Error loading image. Please try again.");
@@ -218,7 +219,7 @@ export const UploadedResults = () => {
                 </p>
               ) : (
                 <img
-                  src={imageSrc}
+                  src={ImageSrc}
                   alt="Result Image"
                   className="w-[480px] h-[480px] object-contain"
                   onError={(e) => console.error("Error loading image:", e)}
@@ -372,7 +373,10 @@ export const UploadedResults = () => {
           </div>
         </div>
       </div>
+      <p className="hidden">{postInterruption}</p>
+      <p className="hidden">{postPosition}</p>
     </div>
+    
   );
 };
 
