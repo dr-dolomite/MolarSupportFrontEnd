@@ -253,7 +253,7 @@ function Features() {
         </div>
 
         {/* Right div */}
-        <div className="outline outline-4 outline-[#23314C] bg-[rgba(255,255,255,0.04)] rounded-[35px] h-100 shadow-3x1 hover:-translate-y-4 transition-all duration-300">
+        <div className="outline outline-4 outline-[#23314C] bg-[rgba(255,255,255,0.04)] rounded-[35px] h-100 shadow-3x1">
           <div className="m-5 outline-dashed outline-2 rounded-[35px] outline-[#23314C]">
             {/* Pass onDragAndDropError to DragAndDrop */}
             <DragAndDrop

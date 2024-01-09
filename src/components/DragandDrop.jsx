@@ -4,6 +4,8 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import IMAGES from "../img/images";
 
+import { LuTrash2 } from "react-icons/lu";
+
 export default function DragAndDrop({
   onDragAndDropError,
   onDragAndDropAccept,
@@ -106,12 +108,14 @@ export default function DragAndDrop({
 
   return (
     <div className="flex h-screen flex-col justify-center items-center min-w-[80%]">
-      <img
-        src={IMAGES.toothLogo}
-        alt="tooth"
-        className="w-[108px] h-[104px] hover:w-[124px] hover:h-[120px] ease-in-out duration-300 cursor-pointer"
-        onClick={openFileExplorer}
-      />
+      {files.length === 0 && (
+        <img
+          src={IMAGES.toothLogo}
+          alt="tooth"
+          className="w-[108px] h-[104px] cursor-pointer hover:-translate-y-4 transition-all duration-300"
+          onClick={openFileExplorer}
+        />
+      )}
 
       <form
         className="m-8 gap-y-8 grid grid-cols-1 sm:w-[420px] text-center"
@@ -121,51 +125,52 @@ export default function DragAndDrop({
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
       >
-        <div className="flex flex-col justify-center items-center">
-          <p className="font-nunito text-[24px] font-semibold">
-            Drag & Drop to Upload the
-          </p>
-          <p
-            className="font-bold text-blue-600 text-[24px] cursor-pointer font-nunito"
-            onClick={openFileExplorer}
-          >
-            CBCT M3 Axial Slice image
-          </p>
-        </div>
+        {files.length === 0 && (
+          <div className="flex flex-col justify-center items-center cursor-pointer">
+            <p
+              className="font-nunito text-[24px] text-primary font-semibold"
+              onClick={openFileExplorer}
+            >
+              Drag & Drop to Upload the CBCT M3 Axial Slice image
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-col justify-center p-3">
           {files.length > 0 ? (
             files.map((file, idx) => (
               <div key={idx}>
-                <div className="max-w-md max-h-md flex flex-col">
-                  <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">
-                    {file.name}
+                <div className="max-w-md max-h-md flex flex-col justify-center">
+                  <p className="font-nunito font-semibold text-[32px] text-[#6848e7] mb-8">
+                    Axial Slice Image
                   </p>
-                  <span
-                    className="text-red-500 cursor-pointer font-bold text-[18px] font-nunito"
-                    onClick={() => removeFile(idx)}
-                  >
-                    remove
-                  </span>
+                  <p className="font-nunito font-semibold text-[24px] text-white text-ellipsis overflow-hidden">
+                    File: {file.name}
+                  </p>
+                  <div className="flex flex-row items-center mt-6 justify-center">
+                    <div className="rounded-[16px] p-2 px-8 outline outline-white outline-2 bg-[#FFFFFF40] hover:bg-[#FFFFFF80] cursor-pointer">
+                      <LuTrash2
+                        className="w-[36px] h-[40px] text-white"
+                        onClick={() => removeFile(idx)}
+                      />
+                    </div>
+                    <div
+                      className="flex items-center ml-8 rounded-[16px] w-auto p-2 px-8 bg-[#6e58c6] hover:bg-[#6e58c6]/80 cursor-pointer"
+                      onClick={handleSubmitFile}
+                    >
+                      <p className="font-nunito font-semibold text-[26px] text-[#ffff]">
+                        Submit
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))
           ) : (
-            <p className="font-nunito font-normal text-[14px] text-ellipsis overflow-hidden">
-              No files selected
+            <p className="font-nunito font-normal text-[24px] text-primary text-ellipsis overflow-hidden">
+              No file selected
             </p>
           )}
-        </div>
-
-        <div className="flex items-center justify-center">
-          <button
-            className="bg-[#6e58c6] hover:bg-[#6e58c6]/80 rounded-lg p-3 w-[180px]"
-            onClick={handleSubmitFile}
-          >
-            <span className=" text-white font-nunito font-semibold text-[16px]">
-              Submit
-            </span>
-          </button>
         </div>
 
         {files.length > 0 && (

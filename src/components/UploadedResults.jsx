@@ -209,9 +209,9 @@ export const UploadedResults = () => {
           </div>
 
           {/* Left bottom div */}
-          <div className="h-[640px] w-[620px] rounded-[35px] shadow-3x1 p-8 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300 bg-white">
+          <div className="h-[640px] w-[620px] rounded-[35px] shadow-3x1 p-6 items-center flex flex-col justify-center hover:-translate-y-4 transition-all duration-300 bg-white">
             {/* Display the result image */}
-            <div className="outline-dashed outline-offset-[40px] rounded-[24px] outline-[#23314C]">
+            <div className="outline-dashed outline-offset-[34px] rounded-[24px] outline-gray-500">
               {loading ? (
                 <p className="font-nunito font-semibold italic text-[32px] p-4">
                   {error ? error : "Waiting for image..."}
@@ -221,7 +221,7 @@ export const UploadedResults = () => {
                 <img
                   src={imageSrc}
                   alt="Result Image"
-                  className="w-[420px] h-[440px] object-contain"
+                  className="w-[480px] h-[480px] object-contain"
                   onError={(e) => console.error("Error loading image:", e)}
                 />
               )}
@@ -333,37 +333,6 @@ export const UploadedResults = () => {
                 </div>
               </div>
             </div>
-
-            {/*} <div className="flex flex-row gap-x-6 font-nunito text-[#23314C] text-[28px] justify-center mt-20 ">
-              <p className="text-left text-2xl font-semibold text-primary mb-3 flex items-center">
-                <RiRectangleFill
-                  className="mr-2"
-                  style={{ color: "#419e59", marginRight: "10px" }}
-                />
-                Mandibular Third Molar
-              </p>
-              <p className="text-left text-2xl font-semibold text-primary mb-3 flex items-center">
-                <RiRectangleFill
-                  className="mr-2"
-                  style={{ color: "#792879", marginRight: "10px" }}
-                />
-                Mandibular Canal
-              </p>
-            </div>
-
-            <div className="mt-8 font-nunito mx-10 text-[20px] font-semibold">
-              <ul className="list-none">
-                <li className="my-3">M3-MC Relation:</li>
-                <li className="my-3">Position: {position}</li>
-                <li className="my-3">
-                  Distance between IAN and tooth: {distance}
-                </li>
-                <li className="my-3">
-                  Interruption of Corticalization: {interruption}
-                </li>
-                <li className="my-3">Risk of nerve injury:</li>
-              </ul>
-              </div>*/}
           </div>
 
           {/* Right bottom div */}
