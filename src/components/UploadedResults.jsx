@@ -241,7 +241,7 @@ export const UploadedResults = () => {
                 </div>
 
                 <div className="flex flex-row items-center my-2">
-                  <RiSquareFill className="rounded-[14px] text-[50px] text-[#792879] mr-4" />
+                  <RiSquareFill className="rounded-[14px] text-[50px] text-[#c94dc9] mr-4" />
                   <p className="text-[32px] text-[#23314C] font-normal font-nunito">
                     Mandibular Canal
                   </p>
